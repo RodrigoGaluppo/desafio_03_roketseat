@@ -8,7 +8,7 @@ function App() {
   const [projects,setProjects] = useState([])
 
   useEffect(()=>{
-    api.get('repositories').then(res=>{
+    api.get('/repositories').then(res=>{
       setProjects(res.data)
     })
   },[])
@@ -20,23 +20,23 @@ function App() {
       techs:'react'
     }
     const newRepo = await api.post('repositories',project)
-
-    setProjects([...projects],newRepo.data)
+    console.log(newRepo)
+    setProjects([...projects,newRepo.data])
   }
 
   async function handleRemoveRepository(id) {
 
-    await api.delete(`repositories/${id}`)
+    await api.delete(`/repositories/${id}`)
 
-    setProjects([...projects])
+    setProjects(projects.filter(project=>project.id !== id))
   }
 
   return (
     <div>
-      <ul data-testid="repository-list">
+    <ul data-testid="repository-list">
       {projects.map(project=>
 
-          <li key={project.id}>
+          <li  key={project.id}>
             {project.title}
             
             <button onClick={() => handleRemoveRepository(project.id)}>
